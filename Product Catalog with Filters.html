@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="productCatalogApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Catalog</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .catalog-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 100%;
+    }
+    h2 {
+      color: #3498db;
+    }
+    .filters {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    select, input {
+      padding: 10px;
+      margin-right: 10px;
+    }
+    .product {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="catalog-container" ng-controller="CatalogController">
+  <h2>Product Catalog</h2>
+  
+  <div class="filters">
+    <select ng-model="selectedCategory" ng-options="category for category in categories">
+      <option value="">All Categories</option>
+    </select>
+    <input type="text" ng-model="searchText" placeholder="Search by name">
+  </div>
+  
+  <div class="product" ng-repeat="product in filteredProducts">
+    <h3>{{ product.name }}</h3>
+    <p>Category: {{ product.category }}</p>
+    <p>Price: ${{ product.price }}</p>
+    <p ng-if="product.featured">Featured</p>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<script>
+angular.module('productCatalogApp', [])
+.controller('CatalogController', function($scope) {
+  $scope.products = [
+    { name: 'Product 1', category: 'Electronics', price: 100, featured: true },
+    { name: 'Product 2', category: 'Clothing', price: 50, featured: false },
+    { name: 'Product 3', category: 'Electronics', price: 120, featured: true },
+    { name: 'Product 4', category: 'Furniture', price: 200, featured: false },
+    { name: 'Product 5', category: 'Clothing', price: 30, featured: false }
+  ];
+
+  $scope.categories = ['All Categories', 'Electronics', 'Clothing', 'Furniture'];
+  $scope.selectedCategory = '';
+
+  $scope.filteredProducts = $scope.products;
+
+  $scope.$watchGroup(['selectedCategory', 'searchText'], function(newValues) {
+    var selectedCategory = newValues[0];
+    var searchText = newValues[1].toLowerCase();
+
+    $scope.filteredProducts = $scope.products.filter(function(product) {
+      var categoryMatch = selectedCategory === '' || product.category === selectedCategory;
+      var searchMatch = product.name.toLowerCase().includes(searchText);
+
+      return categoryMatch && searchMatch;
+    });
+  });
+});
+</script>
+
+</body>
+</html>

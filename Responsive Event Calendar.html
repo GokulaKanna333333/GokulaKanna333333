@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="calendarApp">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Responsive Event Calendar</title>
+<style>
+  /* Basic styling for the calendar */
+  .calendar {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+  }
+  .month-header {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+  }
+  .days {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .day {
+    width: calc(100% / 7);
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+</style>
+</head>
+<body>
+
+<div class="calendar" ng-controller="CalendarController">
+  <div class="month-header">{{ currentMonth }}</div>
+  <div class="days">
+    <div class="day" ng-repeat="day in days">{{ day }}</div>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<script>
+angular.module('calendarApp', [])
+.controller('CalendarController', function($scope) {
+  // Function to get the current month and days
+  function getMonth() {
+    var date = new Date();
+    var month = date.toLocaleString('default', { month: 'long' });
+    var year = date.getFullYear();
+    $scope.currentMonth = month + ' ' + year;
+    var daysInMonth = new Date(year, date.getMonth() + 1, 0).getDate();
+    $scope.days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+  }
+
+  getMonth();
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="quizApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Quiz App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .quiz-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    h2 {
+      color: #3498db;
+    }
+    .question {
+      margin: 20px 0;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    button {
+      background-color: #3498db;
+      color: #fff;
+      padding: 10px 15px;
+      margin: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #27ae60;
+    }
+  </style>
+</head>
+<body>
+
+<div class="quiz-container" ng-controller="QuizController">
+  <h2>AngularJS Quiz</h2>
+  <div class="question" ng-show="currentQuestion">
+    <p>{{ currentQuestion.text }}</p>
+    <div class="options">
+      <button ng-repeat="option in currentQuestion.options" ng-click="checkAnswer(option)">
+        {{ option }}
+      </button>
+    </div>
+  </div>
+  <div class="result" ng-show="showResult">
+    Your Score: {{ score }} / {{ questions.length }}
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<script>
+angular.module('quizApp', [])
+.controller('QuizController', function($scope) {
+  $scope.questions = [
+    {
+      text: 'What is AngularJS?',
+      options: ['A JavaScript library', 'A JavaScript framework', 'A programming language'],
+      correctAnswer: 'A JavaScript framework'
+    },
+    {
+      text: 'What does MVVM stand for?',
+      options: ['Model View View Model', 'Model View Controller', 'Model View ViewModel'],
+      correctAnswer: 'Model View ViewModel'
+    },
+    {
+      text: 'What directive is used for two-way data binding in AngularJS?',
+      options: ['ng-if', 'ng-bind', 'ng-model'],
+      correctAnswer: 'ng-model'
+    }
+  ];
+
+  $scope.currentQuestionIndex = 0;
+  $scope.currentQuestion = $scope.questions[$scope.currentQuestionIndex];
+  $scope.score = 0;
+  $scope.showResult = false;
+
+  $scope.checkAnswer = function(selectedOption) {
+    if (selectedOption === $scope.currentQuestion.correctAnswer) {
+      $scope.score++;
+    }
+
+    if ($scope.currentQuestionIndex < $scope.questions.length - 1) {
+      $scope.currentQuestionIndex++;
+      $scope.currentQuestion = $scope.questions[$scope.currentQuestionIndex];
+    } else {
+      $scope.showResult = true;
+    }
+  };
+});
+</script>
+
+</body>
+</html>

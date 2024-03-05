@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="weatherApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .weather-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .temperature {
+            font-size: 2em;
+            color: #4CAF50;
+        }
+
+        .weather-icon {
+            max-width: 100px;
+            margin: 10px auto;
+        }
+
+        .description {
+            color: #777;
+        }
+    </style>
+</head>
+<body ng-controller="WeatherController">
+
+    <div class="weather-container">
+        <h2>Weather App</h2>
+        <div class="temperature">{{ weather.main.temp }}&deg;C</div>
+        <img class="weather-icon" ng-src="https://images.pexels.com/photos/1118873/pexels-photo-1118873.jpeg?cs=srgb&dl=pexels-johannes-plenio-1118873.jpg&fm=jpg" alt="Weather Icon">
+        <div class="description">{{ weather.weather[0].description }}</div>
+        <button ng-click="getWeather()">Refresh</button>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        angular.module('weatherApp', [])
+            .controller('WeatherController', ['$scope', '$http', function ($scope, $http) {
+                $scope.weather = {};
+
+                $scope.getWeatherIcon = function (icon) {
+                    return 'http://openweathermap.org/img/w/' + icon + '.png';
+                };
+
+                $scope.getWeather = function () {
+                    // Replace 'YOUR_API_KEY' with your OpenWeatherMap API key
+                    var apiKey = 'YOUR_API_KEY';
+                    // Replace 'YOUR_CITY' with the desired city name or ID
+                    var city = 'YOUR_CITY';
+                    var apiUrl = 'http://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=' + apiKey + '&units=metric';
+
+                    $http.get(apiUrl)
+                        .then(function (response) {
+                            $scope.weather = response.data;
+                        })
+                        .catch(function (error) {
+                            console.error('Error fetching weather data:', error);
+                        });
+                };
+
+                // Initial load
+                $scope.getWeather();
+            }]);
+    </script>
+</body>
+</html>

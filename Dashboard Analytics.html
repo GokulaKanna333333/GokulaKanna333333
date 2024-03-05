@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="analyticsApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Analytics</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .dashboard-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 100%;
+    }
+    h2 {
+      color: #3498db;
+    }
+    canvas {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="dashboard-container" ng-controller="AnalyticsController">
+  <h2>Dashboard Analytics</h2>
+  <canvas id="barChart" width="400" height="200"></canvas>
+  <canvas id="lineChart" width="400" height="200"></canvas>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+  <script>
+    angular.module('analyticsApp', [])
+      .controller('AnalyticsController', function ($scope) {
+        // Sample data for charts
+        $scope.barChartData = {
+          labels: ['January', 'February', 'March', 'April', 'May'],
+          datasets: [{
+            label: 'Sales',
+            data: [50, 80, 60, 120, 100],
+            backgroundColor: '#3498db',
+            borderColor: '#2980b9',
+            borderWidth: 1
+          }]
+        };
+
+        $scope.lineChartData = {
+          labels: ['January', 'February', 'March', 'April', 'May'],
+          datasets: [{
+            label: 'Website Traffic',
+            data: [300, 450, 350, 500, 400],
+            fill: false,
+            borderColor: '#e74c3c',
+            borderWidth: 2
+          }]
+        };
+
+        // Create Bar Chart
+        var barChartElement = document.getElementById('barChart').getContext('2d');
+        new Chart(barChartElement, {
+          type: 'bar',
+          data: $scope.barChartData,
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true
+                }
+              }]
+            }
+          }
+        });
+
+        // Create Line Chart
+        var lineChartElement = document.getElementById('lineChart').getContext('2d');
+        new Chart(lineChartElement, {
+          type: 'line',
+          data: $scope.lineChartData,
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true
+                }
+              }]
+            }
+          }
+        });
+      });
+  </script>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="chatApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-time Chat Application</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .chat-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+    .messages {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 300px;
+      overflow-y: auto;
+      border-bottom: 1px solid #ddd;
+    }
+    .message {
+      padding: 10px;
+      margin-bottom: 5px;
+      border-radius: 4px;
+      background-color: #3498db;
+      color: #fff;
+      word-wrap: break-word;
+    }
+    .message.sender {
+      background-color: #2ecc71;
+    }
+    input[type="text"] {
+      width: 70%;
+      padding: 10px;
+      margin-right: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    button {
+      width: 25%;
+      padding: 10px;
+      border: none;
+      background-color: #3498db;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="chat-container" ng-controller="ChatController">
+  <ul class="messages">
+    <li ng-repeat="message in messages" ng-class="{ 'message': true, 'sender': message.sender === 'Me' }">
+      <strong>{{ message.sender }}:</strong> {{ message.text }}
+    </li>
+  </ul>
+  <div>
+    <input type="text" ng-model="newMessage" placeholder="Type your message...">
+    <button ng-click="sendMessage()">Send</button>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script>
+    angular.module('chatApp', [])
+      .controller('ChatController', function ($scope) {
+        $scope.messages = [];
+        $scope.newMessage = '';
+
+        $scope.sendMessage = function () {
+          if ($scope.newMessage) {
+            $scope.messages.push({ sender: 'Me', text: $scope.newMessage });
+            $scope.newMessage = '';
+            // Simulating a server update in a real-time scenario
+            // In a real-world application, you'd use a server to handle real-time communication
+            // (e.g., using WebSocket or a dedicated real-time technology)
+          }
+        };
+      });
+  </script>
+</div>
+
+</body>
+</html>
